@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Home
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+Strona glowna slider, info czy cos
+
+    {% if(app.user!=null) %}
+        {{ dump(app.user) }}
+        {{ dump(app.session) }}
+        {{ dump(app.request) }}
+    {% endif %}
+
+
+{% endblock %}

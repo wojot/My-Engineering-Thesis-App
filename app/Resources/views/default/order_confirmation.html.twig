@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Potwierdzenie zamówienia
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+
+        {% if order|length>0 %}
+            {% set o = order[0] %}
+
+            <h3>Dziękujemy za zakup, podsumowanie zamówienia:</h3>
+            <h4>Produkty:</h4>
+            {% set sum = 0 %}
+            {% for product in o.getProducts().getValues() %}
+                {% set p = product.getProduct() %}
+                {% set sum = sum + product.amount * p.getPrice() %}
+                {% set sum_of_product =  product.amount * p.getPrice() %}
+                - <a href="{{ absolute_url('/shop/product/'~p.getId()) }}">{{ p.getName() }}</a>
+                , cena: {{ p.price }}zł, liczba sztuk: {{ product.amount }}, wymiary: {{ p.width~' x '~p.height~' x '~p.depth~'cm' }}, koszt produktów: {{ sum_of_product }}zł
+                <br>
+            {% endfor %}
+            Całkowity koszt produktów: {{ sum }}zł
+            <br><br>
+            {% set c = o.getCarrier() %}
+            <h4>Przewoźnik:</h4>
+            <strong>{{ c.getName() }}</strong>, czas dostawy: {{ c.deliveryTime }}dni, przewidywany czas dostawy:
+            {{ o.getDate().date|date_modify("+"~c.getDeliveryTime()~" day")|date("d.m.Y") }}, koszt: {{ c.cost }}zł
+            <br><br>
+
+            <h4>Dane do wysyłki:</h4>
+            {{ app.user.name~' '~app.user.surname~', '~app.user.postcode~' '~app.user.city~' '~app.user.street~', tel: '~app.user.tel }}
+            <br><br>
+
+            {% if o.notice!=null %}
+                <h4>Uwagi:</h4>
+                {{ o.notice }}
+                <br><br>
+            {% endif %}
+            <h4>Suma:</h4>
+            {% set total_sum = sum + c.cost %}
+            {{ total_sum }}zł
+
+
+            <br><br>
+            <h4>Płatności:</h4>
+            Prosimy o dokonanie przelewu w kwocie {{ total_sum }}zł, w treści wpisując:<br>
+            <cite title="Source Title">{{ app.user.username }} {{ o.getDate().date|date("dmYHi") }}</cite><br><br>
+            Na Dane:<br>
+            {{ bank.bankName }}<br>
+            {{ bank.ownerName }}<br>
+            {{ bank.IBAN }}<br>
+
+
+
+        {% else %}
+            <h2>Wystąpił błąd - brak zamówienia.</h2>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Produkty
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <table id="tableSort" class="table table-hover table-responsive tablesorter">
+                <thead>
+                <tr>
+                    <th colspan="7">
+                        <a href="{{ path('product_new') }}" class="btn btn-success btn-block"><span
+                                    class="glyphicon glyphicon-plus" aria-hidden="true"></span> Dodaj nowy produkt</a>
+                    </th>
+                </tr>
+                {% if(products!=null) %}
+                    <tr>
+                        <th>Edycja</th>
+                        <th>Id <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Nazwa <span class="glyphicon glyphicon-sort"></span></th>
+                        {#<th>Opis</th>#}
+                        <th>Cena <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Stan</th>
+                        {#<th>Atrybuty</th>#}
+                        <th>Kategoria <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Zdjęcia</th>
+                    </tr>
+                {% endif %}
+                </thead>
+                {% if(products!=null) %}
+                    {% for p in products %}
+                        {% if p.deleted==0 %}
+                            <tr>
+                                <td class="edit_buttons">
+                                    {#<div class="btn-group" role="group" aria-label="edit">#}
+
+                                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                                            data-target="#deleteConfirmation{{ p.id }}">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Usuń
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="deleteConfirmation{{ p.id }}" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="deleteConfirmationlLabel{{ p.id }}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <h4 class="modal-title" id="deleteConfirmationlLabel{{ p.id }}">
+                                                        Potwierdź usunięcie produktu "{{ p.name }}"</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Usunięcie produktu spowoduje usunięcie wszystkich zdjęć przypisanych
+                                                    do
+                                                    produktu.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        Zamknij to okno
+                                                    </button>
+                                                    <a href="{{ path('delete_product', {'id':p.id}) }}" type="button"
+                                                       class="btn btn-danger">Usuń produkt</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a href="{{ path('product_edit', {'id':p.id}) }}" type="button"
+                                       class="btn btn-warning">
+                                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edytuj
+                                    </a>
+                                    {#</div>#}
+                                </td>
+                                <td>{{ p.id }}</td>
+                                <td>{{ p.name }}</td>
+                                {#<td>{{ p.description[:40] }}{% if p.description|length > 40 %}...{% endif %}</td>#}
+                                <td>{{ p.price }}zł</td>
+                                <td>{% if p.active==true %}<span class="glyphicon glyphicon-ok active-success"
+                                                                 aria-hidden="true"></span>{% else %}<span
+                                            class="glyphicon glyphicon-remove active-danger"
+                                            aria-hidden="true"></span>{% endif %}</td>
+
+                                {#<td>#}
+                                {#<p>Szerokość: {{ p.width }}cm</p>#}
+                                {#<p>Wysokość: {{ p.height }}cm</p>#}
+                                {#<p>Głębokość: {{ p.depth }}cm</p>#}
+                                {#<p>Waga: {{ p.weight }}kg</p>#}
+                                {#</td>#}
+
+                                {#<td>{{ p.width }}cm</td>#}
+                                {#<td>{{ p.height }}cm</td>#}
+                                {#<td>{{ p.depth }}cm</td>#}
+                                {#<td>{{ p.weight }}kg</td>#}
+                                <td>{% if p.getCategory().getName() is defined %}<h4>
+                                        <span class="label label-success">{{ p.getCategory().getName() }}</span>
+                                        </h4>{% else %}
+                                        <h4>
+                                            <span class="label label-danger">Brak kategorii!</span></h4>{% endif %}</td>
+                                <td class="photo_admin_row">
+                                    <div class="row">
+
+                                        {% for photo in p.getImages().getValues() %}
+                                            <img src="{{ asset('uploads/'~photo.image) | imagine_filter('thumb_admin') }}"
+                                                 class="img-thumbnail img_admin">
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </table>
+
+            {% if(products!=null) %}
+                {{ dump(products) }}
+            {% else %}
+                <h3>Brak produktów.</h3>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+{% endblock %}

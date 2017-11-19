@@ -1,0 +1,6 @@
+{% for p in pages %}
+    <li
+        class="{% if uri=='/page/'~p.titleRewrited %}active{% endif %}">
+        <a href="{{ absolute_url('/page/'~p.titleRewrited) }}"><span class="glyphicon glyphicon-{% if p.title=='Kontakt' %}envelope{% else %}file{% endif %}"
+                                                                aria-hidden="true"></span> {{ p.title }}</a></li>
+{% endfor %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Admin
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Użytkownicy</h3>
+            <table id="tableSort" class="table table-hover table-responsive tablesorter">
+                <thead>
+                <tr>
+                    <td>Nick <span class="glyphicon glyphicon-sort"></span> </td>
+                    <td>E-mail <span class="glyphicon glyphicon-sort"></span> </td>
+                    <td>Imię <span class="glyphicon glyphicon-sort"></span> </td>
+                    <td>Nazwisko <span class="glyphicon glyphicon-sort"></span> </td>
+                    <td>Kod pocztowy i miejscowość <span class="glyphicon glyphicon-sort"></span> </td>
+                    <td>Ulica i numer <span class="glyphicon glyphicon-sort"></span> </td>
+                    <td>Telefon <span class="glyphicon glyphicon-sort"></span> </td>
+                    <td>Zamówienia</td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for u in users %}
+                    {#{% if 'ROLE_ADMIN' not in u.roles %}#}
+                    <tr{% if u.username==current_user %} class="info"{% endif %}>
+                        <td>{{ u.username }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.name }}</td>
+                        <td>{{ u.surname }}</td>
+                        <td>{{ u.postcode~' '~u.city }}</td>
+                        <td>{{ u.street }}</td>
+                        <td>{{ u.tel }}</td>
+                        <td><a href="{{ absolute_url('/admin/all_orders?user='~u.username) }}">Zobacz</a></td>
+                    </tr>
+                    {#{% endif %}#}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

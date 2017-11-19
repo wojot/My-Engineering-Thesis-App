@@ -1,0 +1,40 @@
+<?php
+
+namespace ShopBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use ShopBundle\Entity\Product as Product;
+
+/**
+ * DeletedProduct
+ *
+ * @ORM\Table(name="deleted_product")
+ * @ORM\Entity(repositoryClass="ShopBundle\Repository\DeletedProductRepository")
+ */
+class DeletedProduct extends Product
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}

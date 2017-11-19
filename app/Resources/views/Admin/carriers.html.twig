@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Przewoźnicy
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+
+        <div class="col-md-12">
+            {% if(carriers!=null) %}
+                <h3>Lista przewoźników</h3>
+                <table id="tableSort" class="table table-responsive table-hover tablesorter">
+                    <thead>
+                    <th>Edytuj</th>
+                    <th>Id <span class="glyphicon glyphicon-sort"></span></th>
+                    <th>Nazwa <span class="glyphicon glyphicon-sort"></span></th>
+                    <th>Czas <span class="glyphicon glyphicon-sort"></span></th>
+                    <th>Koszt <span class="glyphicon glyphicon-sort"></span></th>
+                    <th>Maksymalna waga <span class="glyphicon glyphicon-sort"></span></th>
+                    <th>Dostepny</th>
+                    </thead>
+                    {% for c in carriers %}
+                        <tr>
+                            <td class="edit_buttons">
+                                {#<div class="btn-group" role="group" aria-label="edit">#}
+
+
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                        data-target="#deleteConfirmation{{ c.id }}">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Usuń
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="deleteConfirmation{{ c.id }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="deleteConfirmationlLabel{{ c.id }}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title" id="deleteConfirmationlLabel{{ c.id }}">
+                                                    Potwierdź usunięcie przewoźnika "{{ c.name }}"</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                Usunięcie przewoźnika może spowodować problemy z przesyłką.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Zamknij to okno
+                                                </button>
+                                                <a href="{{ path('carrier_delete', {'id':c.id}) }}" type="button"
+                                                   class="btn btn-danger">Usuń przewoźnika</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <a href="{{ path('carrier_edit', {'id':c.id}) }}" type="button"
+                                   class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edytuj
+                                </a>
+                                {#</div>#}
+                            </td>
+                            <td>{{ c.id }}</td>
+                            <td>{{ c.name }}</td>
+                            <td>{{ c.deliveryTime }}{% if c.deliveryTime==1 %}dzień{% else %}dni{% endif %}</td>
+                            <td>{{ c.cost }}zł</td>
+                            <td>{{ c.maxWeight }}kg</td>
+                            <td>
+                                {% if c.active==true %}<span class="glyphicon glyphicon-ok active-success"
+                                                             aria-hidden="true"></span>{% else %}<span
+                                        class="glyphicon glyphicon-remove active-danger"
+                                        aria-hidden="true"></span>{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <h3>Brak przewoźników.</h3>
+            {% endif %}
+        </div>
+        <div class="col-md-12">
+            <h3>Dodaj nowego przewoźnika</h3>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+
+{% endblock %}

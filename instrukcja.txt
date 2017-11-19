@@ -1,0 +1,5 @@
+Aby uruchomiæ aplikacjê lokalnie, nale¿y zainstalowaæ pakiet serwera WWW dla PHP np. XAMPP.
+Nastepnie nale¿y wgraæ bazê danych inz_shop.sql.
+Tak przygotowane œrodowisko, nale¿y uruchomiæ z wbudowanej we framework konsoli.
+Znajduj¹c siê w folderze aplikacji, nale¿y uruchomiæ komendê "php bin/console server:run".
+Aby uruchomiæ aplikacjê, wystarczy przejœæ pod adres http://localhost:8000/ z dowolnej przegl¹darki.

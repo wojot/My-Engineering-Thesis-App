@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Strony statyczne
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if(pages!=null) %}
+                <h3>Strony statyczne</h3>
+                <table id="tableSort" class="table table-hover table-responsive tablesorter">
+                    <thead>
+                    <tr>
+                        <th>Edycja</th>
+                        <th>Id <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Tytuł <span class="glyphicon glyphicon-sort"></span></th>
+                    </tr>
+                    </thead>
+                    {% for p in pages %}
+                        <tr>
+                            <td class="edit_buttons">
+                                <a href="{{ path('static_pages_delete', {'id':p.id}) }}" type="button"
+                                   class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Usuń
+                                </a>
+                                <a href="{{ path('static_pages_edit', {'id':p.id}) }}" type="button"
+                                   class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edytuj
+                                </a>
+                            </td>
+                            <td>{{ p.id }}</td>
+                            <td>{{ p.title }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <h3>Brak stron statycznych.</h3>
+            {% endif %}
+        </div>
+        <div class="col-md-12">
+            <h3>Dodaj nową stronę statyczną</h3>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

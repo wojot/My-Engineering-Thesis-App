@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Moje zamówienia
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        {% if(orders!=null) %}
+            <h3>Moje zamówienia:</h3>
+            <table id="tableSort" class="table table-hover tablesorter">
+                <thead>
+                <tr>
+                    <td>Data zamówienia <span class="glyphicon glyphicon-sort"></span></td>
+                    <td>Przewidywana dostawa <span class="glyphicon glyphicon-sort"></span></td>
+                    <td>Nazwa przewoźnika <span class="glyphicon glyphicon-sort"></span></td>
+                    <td>Produkty</td>
+                    <td>Uwagi</td>
+                    <td>Suma <span class="glyphicon glyphicon-sort"></span></td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for o in orders %}
+                    <tr>
+                        <td>{{ o.getDate().date|date("d.m.Y, H:i") }}</td>
+                        <td>{{ o.getDate().date|date_modify("+"~o.getCarrier().getDeliveryTime()~" day")|date("d.m.Y") }}</td>
+
+                        <td>{{ o.getCarrier().getName() }}</td>
+                        <td>
+                            {% set sum = o.getCarrier().getCost() %}
+                            {% for product in o.getProducts().getValues() %}
+                                {% set sum = sum + product.amount * product.getProduct().getPrice() %}
+                                - <a
+                                    href="{{ absolute_url('/shop/product/'~product.getProduct().getId()) }}">{{ product.getProduct().getName() }}</a>, liczba sztuk: {{ product.amount }}
+                                <br>
+                            {% endfor %}
+                        </td>
+                        <td>{{ o.getNotice() }}</td>
+                        <td>{{ sum }}zł</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3>Brak zamówień.</h3>
+        {% endif %}
+    </div>
+{% endblock %}

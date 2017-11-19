@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Slajdy
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+
+        <div class="col-md-12">
+            {% if(slides!=null) %}
+            <h3>Lista slajdów</h3>
+            <table class="table table-responsive table-hover">
+                <thead>
+                <th>Edytuj</th>
+                <th>Id</th>
+                <th>Zdjęcie</th>
+                <th>Pozycja</th>
+                <th>Zmiana pozycji</th>
+                </thead>
+                {% for s in slides %}
+                    <tr>
+                        <td class="edit_buttons">
+
+                            <a href="{{ path('slide_delete', {'id':s.id}) }}" type="button"
+                               class="btn btn-danger btn-block">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Usuń
+                            </a>
+
+                        </td>
+                        <td>{{ s.id }}</td>
+                        <td><img src="{{ asset('uploads/'~s.image)| imagine_filter('thumb_admin') }}"></td>
+                        <td>{{ s.position }}</td>
+                        <td>
+                            <a href="{{ path('slide_up', {'id':s.id}) }}" type="button"
+                               class="btn btn-warning">
+                                <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                            </a>
+                            <a href="{{ path('slide_down', {'id':s.id}) }}" type="button"
+                               class="btn btn-warning">
+                                <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <h3>Brak slajdów.</h3>
+            {% endif %}
+        </div>
+        <div class="col-md-12">
+            <h3>Dodaj nowy slajd</h3>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+
+{% endblock %}

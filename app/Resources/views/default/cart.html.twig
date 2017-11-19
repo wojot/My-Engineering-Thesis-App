@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Koszyk
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            {% if app.session.get('products')|length>0 %}
+
+                {#<div class="progress">#}
+                {#<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0"#}
+                {#aria-valuemax="100" style="width: 0%">#}
+                {#</div>#}
+                {#</div>#}
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>Nazwa produktu</td>
+                        <td>Liczba sztuk</td>
+                        <td>Suma</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set sum = 0 %}
+                    {% set amount = 0 %}
+                    {% for key, i in app.session.get('products') %}
+                        {% for p in products %}
+                            {% if p.getId() == i.id %}
+                                <tr>
+                                    <td><a href="{{ absolute_url('/shop/product/'~i.id) }}">{{ p.getName() }}</a></td>
+                                    <td>{{ i.amount }}</td> {% set amount = amount + i.amount %}
+                                    <td>{{ i.amount * p.getPrice() }}zł
+                                    </td> {% set sum = sum + i.amount * p.getPrice() %}
+                                    <td><a href="{{ absolute_url('/cart/delete/'~key) }}"
+                                           class="btn btn-danger btn-block">Usuń
+                                            z koszyka</a></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                    <thead>
+                    <tr>
+                        <td>Razem:</td>
+                        <td>{{ amount }} sztuk</td>
+                        <td>{{ sum }}zł</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                </table>
+
+                {% if app.user !=null %}
+                    <h3>Dane do wysyłki: <a href="{{ path('fos_user_profile_edit') }}"
+                                            class="btn btn-primary">Edytuj</a>
+                    </h3>
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td><strong>Imię i nazwisko</strong></td>
+                            <td><strong>Kod pocztowy</strong></td>
+                            <td><strong>Miejscowość</strong></td>
+                            <td><strong>Ulica i numer</strong></td>
+                            <td><strong>Telefon kontaktowy</strong></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ app.user.name~' '~app.user.surname }}</td>
+                            <td>{{ app.user.postcode }}</td>
+                            <td>{{ app.user.city }}</td>
+                            <td>{{ app.user.street }}</td>
+                            <td>{{ app.user.tel }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                {% endif %}
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+
+            {% else %}
+                <h3>
+                    Brak produktów w koszyku! <span class="glyphicon glyphicon-shopping-cart"></span>
+                </h3>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

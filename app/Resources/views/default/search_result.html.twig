@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Wyniki wyszukiwania
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <h3>Wyniki wyszukiwania:</h3>
+        {% for k, v in result %}
+            {% if v is iterable %}
+                <h4>- dla frazy "{{ k }}"</h4>
+                {% if v==null %}
+                    <div class="panel panel-danger search_empty">
+                        <div class="panel-body">
+                            Brak wyników
+                        </div>
+                    </div>
+                {% endif %}
+                {% for product in v %}
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Nazwa: {{ product.name }}, cena: {{ product.price }}, <a
+                                    href="{{ path('product_details',{'id':product.id}) }}">więcej szczegółów</a></div>
+                        <div class="panel-body">
+                            <p>{{ product.description[:400]|raw }}..</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                {% set product=v %}
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Nazwa: {{ product.name }}, cena: {{ product.price }}, <a
+                                href="{{ path('product_details',{'id':product.id}) }}">więcej szczegółów</a></div>
+                    <div class="panel-body">
+                        <p>{{ product.description[:400]|raw }}..</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

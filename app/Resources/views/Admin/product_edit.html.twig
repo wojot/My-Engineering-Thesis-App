@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Produkty
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Edytuj produkt id {{ product.id }}</h1>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+
+
+            <a href=" {{ path('products') }}">Powrót</a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{{ path('product_photos_edit', {'id':product.id}) }}" type="button"
+               class="btn btn-warning btn-block">Edytuj zdjęcia</a>
+
+            {% for p in product.getImages().getValues() %}
+                <img src="{{ asset('uploads/'~p.image) | imagine_filter('thumbs_edit_product') }}">
+                {#{{ dump(p.image) }}#}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

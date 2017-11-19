@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Produkty
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    {% set current_page = app.request.get('page') %}
+    {% if app.request.get('page')==null %}
+        {% set current_page = 1 %}
+    {% endif %}
+    {% set next_page = current_page+1 %}
+    {% set prev_page = current_page-1 %}
+
+    {% set category_request = "" %}
+    {% if app.request.get('category')!=null %}
+        {% set category_request = "category="~app.request.get('category')~'&' %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-pills nav-justified">
+                <li>
+                    <a href="{{ absolute_url('/?category=wszystkie&page=1') }}" class="btn btn-primary">Wszystkie
+                        kategorie</a>&nbsp;
+                </li>
+                {% for cat in categories %}
+                    <li>
+                        <a{% if requested_category==cat.name %} class="active"{% endif %} href="{{ absolute_url('/?category='~cat.name~'&page=1') }}"
+                           class="btn btn-primary" data-toggle="tooltip" data-placement="top"
+                           title="{{ cat.description }}">{{ cat.name }}</a>&nbsp;
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {% for p in products %}
+                {% if (p.deleted==0) and (p.active==1) %}
+
+                    <div class="col-xs-12 col-md-4 shop">
+
+                        <div class="thumbnail">
+                            {% if p.getImages().count()!=0 %}
+                                {% for i in 0..p.getImages().count()-1 %}
+                                    {% if i==0 %}
+                                        <a href="{{ path('product_details', {'id':p.id}) }}"><img
+                                                    src="{{ asset('uploads/'~p.getImages().getValues()[i].image) | imagine_filter('thumb_shop') }}"
+                                                    alt="..." class="img_shop"></a>
+                                        {#<div class="row col-centered">#}
+                                    {% else %}
+                                        {#{% if i<4 %}#}
+                                        {#<div class="col-md-4">#}
+                                        {#<img class="thumbnail"#}
+                                        {#src="{{ asset('uploads/'~p.getImages().getValues()[i].image) | imagine_filter('thumbs_shop_small') }}">#}
+                                        {#</div>#}
+                                        {#{% endif %}#}
+                                    {% endif %}
+                                {% endfor %}
+                                {#</div>#}
+                            {% endif %}
+
+                            <div class="caption">
+                                <h4 class="product_title">{% if(p.name|length>29) %}{{ p.name[:29] }}...{% else %}{{ p.name }}{% endif %}
+                                </h4>
+                                <p>Kategoria: {% if p.getCategory().getName() is defined %}{{ p.getCategory().getName() }}{% else %}Brak kategorii{% endif %}</p>
+                                <p>Wymiary: {{ p.width ~ ' x ' ~ p.height ~ ' x ' ~ p.depth }}cm </p>
+                                <div class="row">
+                                    <div class="col-md-6">Waga: {{ p.weight }}kg.</div>
+                                    <div class="col-md-6"><p class="active-success"><strong>Cena: </strong>{{ p.price }}
+                                            zł</p></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="btn-group btn-group-justified" role="group" aria-label="actions">
+                                            <a href="{{ path('order', {'id':p.id,'amount':1}) }}"
+                                               class="btn btn-success"
+                                               role="button"><span
+                                                        class="glyphicon glyphicon-shopping-cart"></span> Dodaj</a>
+                                            <a href="{{ path('product_details', {'id':p.id}) }}"
+                                               class="btn btn-primary"
+                                               role="button"><span class="glyphicon glyphicon-zoom-in"></span> Szczegóły</a>
+                                        </div>
+                                    </div>
+
+
+                                    {#<a href="{{ path('order', {'id':p.id,'amount':1}) }}"#}
+                                    {#class="btn btn-success btn-block"#}
+                                    {#role="button"><span#}
+                                    {#class="glyphicon glyphicon-shopping-cart"></span> Dodaj</a>#}
+                                    {#<a href="{{ path('product_details', {'id':p.id}) }}"#}
+                                    {#class="btn btn-primary btn-block"#}
+                                    {#role="button">Więcej#}
+                                    {#informacji</a>#}
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% if products|length<1 %}
+        {#<h3>Kategoria nie posiada produktów</h3>#}
+        <h3>Brak produktów</h3>
+    {% else %}
+        <div class="row">
+            <div class="col-md-12 col-centered">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li {% if prev_page<1 %}class="disabled"{% endif %}>
+                            <a href="{{ absolute_url('/?'~category_request~'page='~prev_page) }}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+
+                            {% for page in 1..pages %}
+                        <li {% if (page == current_page) %}class="active"{% endif %}>
+                            <a href="{{ absolute_url('/?'~category_request~'page='~page) }}">{{ page }}</a></li>
+                        {% endfor %}
+                        <li {% if next_page>pages %}class="disabled"{% endif %}>
+                            <a href="{{ absolute_url('/?'~category_request~'page='~next_page) }}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

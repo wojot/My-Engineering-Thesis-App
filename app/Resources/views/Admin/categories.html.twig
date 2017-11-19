@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    Kategorie
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+
+            {% if(categories!=null) %}
+                <h3>Kategorie</h3>
+                <table id="tableSort" class="table table-hover table-responsive tablesorter">
+                    <thead>
+                    <tr>
+                        <th>Edycja</th>
+                        <th>Id <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Nazwa <span class="glyphicon glyphicon-sort"></span></th>
+                        <th>Opis</th>
+                    </tr>
+                    </thead>
+                    {% for c in categories %}
+                        <tr>
+                            <td class="edit_buttons">
+                                {#<div class="btn-group" role="group" aria-label="edit">#}
+
+
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                        data-target="#deleteConfirmation{{ c.id }}">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Usuń
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="deleteConfirmation{{ c.id }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="deleteConfirmationlLabel{{ c.id }}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title" id="deleteConfirmationlLabel{{ c.id }}">
+                                                    Potwierdź usunięcie kategorii "{{ c.name }}"</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                Usunięcie kategorii może spowodować usunięcie kategorii dla niektórych
+                                                produktów.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Zamknij to okno
+                                                </button>
+                                                <a href="{{ path('category_delete', {'id':c.id}) }}" type="button"
+                                                   class="btn btn-danger">Usuń kategorię</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <a href="{{ path('category_edit', {'id':c.id}) }}" type="button"
+                                   class="btn btn-warning">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edytuj
+                                </a>
+                                {#</div>#}
+                            </td>
+                            <td>{{ c.id }}</td>
+                            <td>{{ c.name }}</td>
+                            <td>{{ c.description[:50] }}{% if c.description|length > 50 %}...{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            {% else %}
+                <h3>Brak kategorii.</h3>
+            {% endif %}
+
+        </div>
+        <div class="col-md-12">
+            <h3>Dodaj nową kategorię</h3>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

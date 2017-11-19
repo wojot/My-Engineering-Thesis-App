@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }}
+    {{ product.getName() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+
+        {% if (product.active==true) and(product.deleted==0) %}
+
+            <div class="col-md-4 col-xs-12 thumbnail ">
+                <a href="{{ asset('uploads/'~product.getImages().first.image) | imagine_filter('product_details_big') }}"
+                   data-lightbox="product-{{ product.id }}-gallery">
+                    <img src="{{ asset('uploads/'~product.getImages().first.image) | imagine_filter('thumb_shop') }}"/></a>
+
+                {#<img src="{{ asset('uploads/'~product.getImages().first.image) | imagine_filter('thumb_shop') }}"#}
+                {#class="img img-responsive">#}
+            </div>
+
+            <div class="col-md-2 col-xs-12">
+                {% for i in product.getImages() %}
+
+                    {% if i.image != product.getImages().first.image %}
+
+
+                        <a href="{{ asset('uploads/'~i.image) | imagine_filter('product_details_big') }}"
+                           data-lightbox="product-{{ product.id }}-gallery">
+                            <div class="thumbnail product_details_photo">
+
+                                <img src="{{ asset('uploads/'~i.image) | imagine_filter('thumb_product_details') }}"/>
+                            </div>
+                        </a>
+
+
+                        {#<div class="thumbnail product_details_photo"><img#}
+                        {#src="{{ asset('uploads/'~i.image) | imagine_filter('thumb_product_details') }}"#}
+                        {#class="img"></div>#}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="col-md-2 col-xs-12">
+            <h3>Dane: </h3>
+            <p>Kategoria: <strong>{{ product.getCategory().getName() }}</strong></p>
+            <p>Szerokość: <strong>{{ product.width }}cm </strong></p>
+            <p>Wysokość: <strong>{{ product.height }}cm </strong></p>
+            <p>Głębokość: <strong>{{ product.depth }}cm </strong></p>
+            <p>Waga: <strong>{{ product.weight }}kg</strong></p>
+            <p>Stan: <strong>{% if product.active==true %}Dostępny{% else %}Niedostępny{% endif %}</strong></p>
+        </div>
+        <div class="col-md-4 col-xs-12{% if (product.active==false) or (product.deleted==1) %} display_none{% endif %}">
+            <h3>Nazwa: <strong>{{ product.name }}</strong></h3></p>
+            <h4>Cena za sztukę: <strong>{{ product.price }}zł</strong></h4></p>
+
+
+            {{ form_start(form) }}
+            Liczba sztuk:
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_widget(form.amount) }}
+                </div>
+                <div class="col-md-8">
+                    {{ form_widget(form.save) }}
+                </div>
+            </div>
+            {#{{ form_widget(form) }}#}
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Opis produktu</h1>
+            {% autoescape false %}
+                {{ product.description }}
+            {% endautoescape %}
+        </div>
+
+
+    </div>
+    <br><br><br>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Komentarze do produktu</h4>
+
+            {% if comments|length>0 %}
+                {% for comment in comments %}
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ comment.date|date('d.m.Y H:i') }} {{ comment.user.name~' '~comment.user.surname }}
+                                napisał'a o produkcie:</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ comment.content|raw }}
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                <div class="panel panel-default comment_empty">
+                    <div class="panel-body">
+                        Brak komentarzy,{% if app.user==null %} zaloguj się,{% endif %} napisz opinię i bądź pierwszy!
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+        {% if app.user!=null %}
+            <div class="col-md-12">
+                <h4>Dodaj komentarz
+                    <small>jako {{ app.user.name~' '~app.user.surname }}</small>
+                </h4>
+                {{ form_start(comment_form) }}
+                {{ form_widget(comment_form) }}
+                {{ form_end(comment_form) }}
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        lightbox.option({
+            'resizeDuration': 200,
+            'albumLabel': "Zdjęcie %1 z %2",
+            'wrapAround': true
+        })
+    </script>
+{% endblock %}

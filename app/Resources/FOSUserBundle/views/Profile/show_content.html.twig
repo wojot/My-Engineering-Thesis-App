@@ -1,0 +1,21 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Mój profil</h3>
+        <div class="fos_user_user_show">
+            <p class="text-center">{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
+            <p class="text-center">{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+            <p class="text-center">{{ 'profile.show.name'|trans }}: {{ user.name }}</p>
+            <p class="text-center">{{ 'profile.show.postcode'|trans }}: {{ user.postcode }}</p>
+            <p class="text-center">{{ 'profile.show.city'|trans }}: {{ user.city }}</p>
+            <p class="text-center">{{ 'profile.show.street'|trans }}: {{ user.street }}</p>
+            <p class="text-center">{{ 'profile.show.tel'|trans }}: {{ user.tel }}</p>
+            <p class="text-center">{{ 'profile.show.name'|trans }}: {{ user.name }}</p>
+            <p class="text-center">
+            <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary">Edytuj dane</a>
+            <a href="{{ path('fos_user_change_password') }}" class="btn btn-primary">Zmień hasło</a></p>
+
+        </div>
+    </div>
+</div>
