@@ -1,0 +1,156 @@
+body {
+    background-image: url("../images/bgzam.jpg");
+    background-repeat: repeat-y;
+    background-attachment: fixed;
+    background-size: 100% auto;
+}
+
+.main_container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-bottom: 50px;
+    min-height: 800px;
+    margin-top: 50px;
+    /*-moz-box-shadow: -5px -5px 0 5px #343434;*/
+    /*-webkit-box-shadow: -5px -5px 0 5px#343434;*/
+    /*box-shadow: -5px -5px 0 5px #343434;*/
+}
+
+.shop {
+    height: 380px;
+}
+
+.img_shop {
+    max-height: 150px;
+}
+
+.img_admin {
+    max-height: 50px;
+}
+
+.photo_admin_row {
+    min-width: 100px;
+    max-width: 300px;
+}
+
+.col-centered {
+    float: none;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.display_none {
+    display: none;
+}
+
+.centered {
+
+    margin: 0 auto;
+}
+
+.product_details_photo {
+    /*background:black;*/
+    /*padding: 5px;*/
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-right: 6px;
+    margin-bottom: 15px;
+}
+
+.product_title {
+    color: #2780E3;
+    font-weight: bold;
+}
+
+.nav > li > a:hover {
+    background: rgba(192, 192, 192, 0.57);
+}
+
+.admin-menu {
+    margin-top: 15px;
+}
+
+.table-hover > tbody > tr:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.amount {
+    width: 20px;
+}
+
+.comment_empty {
+    background: rgba(91, 219, 90, 0.15);
+}
+
+.search_empty {
+    background: rgba(255, 0, 57, 0.15);
+}
+
+.active-success {
+    color: #3FB618;
+}
+
+.active-danger {
+    color: #FF0039;
+}
+
+.alert {
+    margin-bottom: 1px;
+}
+
+#menu {
+    margin-bottom: 15px;
+}
+
+#menu > li {
+    background-color: #2780E3;
+    border-right: solid 1px #1967be;
+    border-left: solid 1px #2d8aff;
+}
+
+#menu li > a {
+    height: 60px;
+    padding-top: 20px;
+}
+
+#menu > li > a:hover, .nav-pills > li > a:hover {
+    background-color: #1967be;
+}
+
+#menu > li.active > a {
+    background-color: #1967be;
+}
+
+#menu > li.active > a:hover, #menu > li:focus, .nav-pills a.active, .nav > li > a:hover, .nav > li > a:focus {
+    background-color: #1967be;
+    color: white;
+}
+
+#menu > li > a {
+    color: white;
+}
+
+.panel-heading > a {
+    color: whitesmoke;
+    text-decoration: underline;
+}
+
+.panel-heading > a:hover {
+    color: #cbcbcb;
+    text-decoration: none;
+}
+
+.glyphicon-sort {
+    color: #1967be;
+}
+
+.glyphicon-sort:hover {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+    .nav-stacked li {
+        float: left;
+        margin-left: 2px;
+    }
+}
